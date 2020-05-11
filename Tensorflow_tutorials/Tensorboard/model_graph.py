@@ -63,5 +63,5 @@ with writer.as_default():
     tf.summary.trace_export(
         name='my_func_trace',
         step=0,
-        profiler_output=logdir
+        profiler_outdir=logdir
     )

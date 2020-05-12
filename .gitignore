@@ -785,6 +785,16 @@ FodyWeavers.xsd
 
 # Tensorflow models
 models/
+saved_model/
+*.h5
 
 # Data
 data/
+
+# Cached data
+*.tfcache*
+
+# Checkpoints
+checkpoints/
+training/
+training_2/

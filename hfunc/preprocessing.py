@@ -143,7 +143,7 @@ def process_path(file_path, CLASS_NAMES, im_height, im_width, channels=3):
     return img, label
 
 
-def load_dataset_images(path):
+def load_dataset_images(path, im_height, im_width):
     """
     This function loads image data into a tf.data.Dataset object, where
     the images have been rescaled to have pixel values between 0 and 1.
@@ -151,6 +151,10 @@ def load_dataset_images(path):
     Args:
 
         path (str): String containing the location of the data
+
+        im_height (int): Desired image height.
+
+        im_width (int): Desired image width.
 
     Returns:
 
@@ -165,12 +169,22 @@ def load_dataset_images(path):
 
     NUM_CLASSES = len(CLASS_NAMES)
 
-    list_ds = tf.data.Dataset.list_files(str(path/'*/*'))
+    datasets = []
+
+    for cla in CLASS_NAMES:
+        ds = tf.data.Dataset.list_files(str(path/f'{cla}/*'))
+        ds = ds.map(
+            lambda x: process_path(x, CLASS_NAMES, im_height, im_width),
+            num_parallel_calls=tf.data.experimental.AUTOTUNE
+        )
+        datasets.append(ds)
+
+    list_ds = tf.data.Dataset.from_tensor_slices(datasets)
 
     labeled_ds = list_ds.interleave(
-        process_path,
+        lambda x: x,
         cycle_length=NUM_CLASSES,
-        num_parllel_calls=tf.data.experimental.AUTOTUNE
+        num_parallel_calls=tf.data.experimental.AUTOTUNE,
     )
 
     del list_ds

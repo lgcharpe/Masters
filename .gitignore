@@ -798,3 +798,6 @@ data/
 checkpoints/
 training/
 training_2/
+
+# Cache
+cache/

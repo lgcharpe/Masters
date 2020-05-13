@@ -76,7 +76,7 @@ for f in list_ds.take(5):
 def get_label(file_path):
     # Convert the path to a list of path components
     parts = tf.strings.split(file_path, os.path.sep)
-    # The second to loast is the class-directory
+    # The second to last is the class-directory
     return parts[-2] == CLASS_NAMES
 
 

@@ -43,7 +43,9 @@ ds_test = ds_test.cache()
 ds_test = ds_test.prefetch(tf.data.experimental.AUTOTUNE)
 
 model = tf.keras.models.Sequential([
-    tf.keras.layers.Flatten(input_shape=(28, 28, 1)),
+    tf.keras.layers.Conv2D(16, 3, input_shape=(28, 28, 1), activation='relu'),
+    tf.keras.layers.MaxPool2D(),
+    tf.keras.layers.Flatten(),
     tf.keras.layers.Dense(128, activation='relu'),
     tf.keras.layers.Dense(10, activation='softmax')
 ])
@@ -62,9 +64,10 @@ tboard_callback = tf.keras.callbacks.TensorBoard(
     profile_batch='500,520'
 )
 
-model.fit(
-    ds_train,
-    epochs=2,
-    validation_data=ds_test,
-    callbacks=[tboard_callback]
-)
+with tf.device("/device:GPU:0"):
+    model.fit(
+        ds_train,
+        epochs=2,
+        validation_data=ds_test,
+        callbacks=[tboard_callback]
+    )

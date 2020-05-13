@@ -8,6 +8,8 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
 import matplotlib.pyplot as plt
 
+tf.compat.v1.disable_eager_execution()
+
 _URL = 'https://storage.googleapis.com/mledu-datasets/cats_and_dogs_filtered.zip'
 
 path_to_zip = tf.keras.utils.get_file(

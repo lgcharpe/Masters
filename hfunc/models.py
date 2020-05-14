@@ -1,5 +1,5 @@
 import tensorflow as tf
-import metrics
+from hfunc import metrics
 
 
 def create_1_layer_ANN_classification(

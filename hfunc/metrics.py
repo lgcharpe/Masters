@@ -1,5 +1,6 @@
 from tensorflow.keras.metrics import Metric
 import tensorflow as tf
+import numpy as np
 
 
 class ClassAccuracy(Metric):
@@ -9,9 +10,12 @@ class ClassAccuracy(Metric):
 
     def update_state(self, y_true, y_pred):
         K = len(set(y_true))
-        oyp = tf.one_hot(tf.argmax(y_pred, axis=1), K)
-        oyt = tf.one_hot(y_true, K)
-        accuracies = tf.reduce_mean(tf.cast(oyp == oyt, tf.float32), axis=0)
+        yp = tf.argmax(y_pred, axis=1)
+        acc = []
+        for i in range(K):
+            a = np.mean((yp[y_true == i] == y_true[y_true == i]).numpy())
+            acc.append(a)
+        accuracies = tf.convert_to_tensor(acc)
         self.accuracies = accuracies
 
     def result(self):

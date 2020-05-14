@@ -1,4 +1,5 @@
 import tensorflow as tf
+import metrics
 
 
 def create_1_layer_ANN_classification(
@@ -64,7 +65,7 @@ def train_basic_ANN(
     model.compile(
         optimizer='adam',
         loss='sparse_categorical_crossentropy',
-        metrics=['accuracy']
+        metrics=['accuracy', metrics.ClassAccuracy]
     )
 
     history = model.fit(

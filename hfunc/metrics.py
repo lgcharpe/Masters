@@ -8,6 +8,7 @@ class ClassAccuracy(Metric):
     def __init__(self, name='class_accuracy', **kwargs):
         super(ClassAccuracy, self).__init__(name=name, **kwargs)
 
+    @tf.function
     def update_state(self, y_true, y_pred):
         K = len(set(y_true))
         yp = tf.argmax(y_pred, axis=1)
@@ -18,5 +19,6 @@ class ClassAccuracy(Metric):
         accuracies = tf.convert_to_tensor(acc)
         self.accuracies = accuracies
 
+    @tf.function
     def result(self):
         return self.accuracies

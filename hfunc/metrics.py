@@ -10,7 +10,7 @@ class ClassAccuracy(Metric):
 
     @tf.function
     def update_state(self, y_true, y_pred):
-        K = len(set(y_true))
+        K = len(set(y_true.numpy()))
         yp = tf.argmax(y_pred, axis=1)
         acc = []
         for i in range(K):

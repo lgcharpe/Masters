@@ -1,0 +1,49 @@
+\documentclass[UKenglish]{ifimaster}  %% ... or USenglish or norsk or nynorsk
+\usepackage[latin1]{inputenc}         %% ... or utf8 or applemac
+\usepackage[T1]{fontenc,url}
+\urlstyle{sf}
+\usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
+\usepackage[backend=biber,style=numeric-comp]{biblatex}
+
+\title{The title of my thesis}        %% ... or whatever
+\subtitle{Any short subtitle}         %% ... if any
+\author{Lucas Charpentier}                      %% ... or whoever 
+
+\bibliography{mybib}                  %% ... or whatever
+
+\begin{document}
+\duoforside[program={Computational Science},
+    option={Imaging and Biomedical Computing},
+    dept={Departement of Informatics \and Departement of Physics},
+    long
+    ]
+\frontmatter{}
+\maketitle{}
+
+\chapter*{Abstract}                   %% ... or Sammendrag or Samandrag
+\autocite{Test}
+\tableofcontents{}
+\listoffigures{}
+\listoftables{}
+
+\chapter*{Preface}                    %% ... or Forord
+
+\mainmatter{}
+\part{Introduction}                   %% ... or Innledning or Innleiing
+
+\chapter{Background}                  %% ... or Bakgrunn
+
+
+\part{The project}                    %% ... or ??
+
+\chapter{Planning the project}        %% ... or ??
+
+
+\part{Conclusion}                     %% ... or Konklusjon
+
+\chapter{Results}                     %% ... or ??
+
+
+\backmatter{}
+\printbibliography
+\end{document}

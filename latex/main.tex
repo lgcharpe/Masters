@@ -1,15 +1,15 @@
-\documentclass[UKenglish]{ifimaster}  %% ... or USenglish or norsk or nynorsk
-\usepackage[latin1]{inputenc}         %% ... or utf8 or applemac
+\documentclass[UKenglish]{ifimaster}
+\usepackage[latin1]{inputenc}
 \usepackage[T1]{fontenc,url}
 \urlstyle{sf}
 \usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
 
-\title{The title of my thesis}        %% ... or whatever
-\subtitle{Any short subtitle}         %% ... if any
-\author{Lucas Charpentier}                      %% ... or whoever 
+\title{The title of my thesis}
+\subtitle{Any short subtitle}
+\author{Lucas Charpentier}
 
-\bibliography{mybib}                  %% ... or whatever
+\bibliography{mybib}
 
 \begin{document}
 \duoforside[program={Computational Science},
@@ -20,28 +20,117 @@
 \frontmatter{}
 \maketitle{}
 
-\chapter*{Abstract}                   %% ... or Sammendrag or Samandrag
-\autocite{Test}
+\chapter*{Abstract}
 \tableofcontents{}
 \listoffigures{}
 \listoftables{}
 
-\chapter*{Preface}                    %% ... or Forord
+\chapter*{Preface}
 
 \mainmatter{}
-\part{Introduction}                   %% ... or Innledning or Innleiing
 
-\chapter{Background}                  %% ... or Bakgrunn
-
-
-\part{The project}                    %% ... or ??
-
-\chapter{Planning the project}        %% ... or ??
+\chapter{Introduction}
+    \section{Background and Motivation}
+    
+    
+    \section{Problem Statement}
 
 
-\part{Conclusion}                     %% ... or Konklusjon
+    \section{Thesis Outline}
 
-\chapter{Results}                     %% ... or ??
+
+\chapter{Planning the project}
+    \section{Machine Learning}
+        \subsection{Supervised Learning}
+        
+        
+        \subsection{Unsupervised Learning}
+
+    
+    \section{Artificial Neural Networks}
+        \subsection{Perceptron}
+
+
+        \subsection{Multilayer Perceptron}
+
+
+        \subsection{Training a Neural Network}
+
+    
+    \section{Convolutional Neural Network}
+        \subsection{Convolutional Layers}
+
+
+        \subsection{Pooling Layers}
+
+    
+    \section{Neural Network Training Optimization}
+        \subsection{Weight Initialization}
+
+
+        \subsection{Training Batch Size}
+
+
+        \subsection{Dropout}
+
+
+    \section{Network Pruning}
+
+    
+    \section{Datasets}
+        \subsection{MNIST}
+
+
+        \subsection{Fashion MNIST}
+
+
+        \subsection{CIFAR-10}
+
+
+    \section{Architectures}
+        \subsection{VGG-16}
+
+\chapter{Single Layer ANN}
+    \section{Pruning Nodes at Random}
+
+
+    \section{Estimating Node Importance based on Loss and Accuracy}
+    
+    
+    \section{Pruning Nodes based on the Loss and Accuracy}
+
+
+    \section{Effects of Changing Training Batch Size on Node Importance}
+
+
+    \section{Effects of Using Droput}
+
+
+\chapter{Multi-Layer Perceptron}
+    \section{Pruning network with pre-calculated importance}
+
+
+    \section{Greedy approach to pruning instead of Exhaustive approach}
+
+
+    \section{Iterative weight initialization using Node importance}
+
+
+
+\chapter{Convolutional Neural Network}
+    \section{Looking at effects of per class accuracy after pruning}
+
+
+    \section{Pruning based on class accuracy}
+
+
+\chapter{Case study: Reducing a VGG-16 model trained on X dataset}
+
+\chapter{Conclusion}
+    \section{Summary}
+
+
+    \section{Future Works}
 
 
 \backmatter{}

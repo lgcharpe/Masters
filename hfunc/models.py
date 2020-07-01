@@ -43,7 +43,8 @@ def train_basic_ANN(
     num_hidden_nodes,
     validation_data=None,
     epochs=10,
-    callbacks=None
+    callbacks=None,
+    verbose=0
 ):
 
     in_shape = x_train.shape[1:]
@@ -72,7 +73,8 @@ def train_basic_ANN(
         y_train,
         validation_data=validation_data,
         epochs=epochs,
-        callbacks=callbacks
+        callbacks=callbacks,
+        verbose=verbose
     )
 
     return model, history

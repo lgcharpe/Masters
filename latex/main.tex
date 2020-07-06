@@ -11,6 +11,8 @@
 
 \bibliography{mybib}
 
+\graphicspath{ {images/} }
+
 \begin{document}
 \duoforside[program={Computational Science},
     option={Imaging and Biomedical Computing},
@@ -92,7 +94,220 @@
 
 \chapter{Single Layer ANN}
     \section{Pruning Nodes at Random}
+        \subsection{MNIST}
+            Artificial Neural Network with single hidden layer of 128 nodes, using adam as optimizer with a learning rate of 0.001 trained on 5 epochs, batch size of 32.
+            Final Accuaracy and Loss on test set are:
+            Loss: 0.0734
+            Accuracy: 0.9770
+            \begin{table}[h!]
+                \centering
+                \begin{tabular}{c | c c c c c c c}
+                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
+                    \cline{2-8}
+                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
+                    \hline
+                    \textbf{Mean} & 0.9765 & 0.9760 & 0.9750 & 0.9724 & 0.9658 & 0.9464 & 0.8555 \\
+                    \textbf{$\sigma$} & 0.0007 & 0.0010 & 0.0015 & 0.0027 & 0.0053 & 0.0122 & 0.0394 \\
+                    \textbf{min} & 0.9740 & 0.9660 & 0.9635 & 0.9494 & 0.9337 & 0.8688 & 0.6598 \\
+                    \textbf{25\%} & 0.9762 & 0.9756 & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
+                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
+                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
+                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
+                    
+                \end{tabular}
+                \caption[Short]{Long}
+            \end{table}
 
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Accuracy_change_random_removal_mnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:acc_rn_mnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{table}[h!]
+                \centering
+                \begin{tabular}{c | c c c c c c c}
+                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
+                    \cline{2-8}
+                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
+                    \hline
+                    \textbf{Mean} & 0.0751 & 0.0767 & 0.0801 & 0.0885 & 0.1090 & 0.1680 & 0.4298 \\
+                    \textbf{$\sigma$} & 0.0023 & 0.0032 & 0.0047 & 0.0083 & 0.0157 & 0.0338 & 0.0989 \\
+                    \textbf{min} & 0.0720 & 0.0714 & 0.0710 & 0.0735 & 0.0791 & 0.1006 & 0.2311 \\
+                    \textbf{25\%} & 0.07 & 0. & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
+                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
+                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
+                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
+                    
+                \end{tabular}
+                \caption[Short]{Long}
+            \end{table}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Loss_change_random_removal_mnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:loss_rn_mnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{table}[h!]
+                \centering
+                \begin{tabular}{c | c c c c c c c}
+                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
+                    \cline{2-8}
+                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
+                    \hline
+                    \textbf{Mean} & 0.0751 & 0.0767 & 0.0801 & 0.0885 & 0.1090 & 0.1680 & 0.4298 \\
+                    \textbf{$\sigma$} & 0.0023 & 0.0032 & 0.0047 & 0.0083 & 0.0157 & 0.0338 & 0.0989 \\
+                    \textbf{min} & 0.0720 & 0.0714 & 0.0710 & 0.0735 & 0.0791 & 0.1006 & 0.2311 \\
+                    \textbf{25\%} & 0. & 0.9756 & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
+                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
+                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
+                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
+                    
+                \end{tabular}
+                \caption[Short]{Long}
+            \end{table}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Num_rem_vs_size_removed_mnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:num_rem_rn_imp_mnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Accuracy_vs_nodes_removed_mnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:acc_rn_imp_mnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Loss_vs_nodes_removed_mnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:loss_rn_imp_mnist}
+            \end{figure}
+
+            Trial text
+
+        \subsection{Fashion MNIST}
+
+            Trial text
+
+            \begin{table}[h!]
+                \centering
+                \begin{tabular}{c | c c c c c c c}
+                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
+                    \cline{2-8}
+                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
+                    \hline
+                    \textbf{Mean} & 0.9765 & 0.9760 & 0.9750 & 0.9724 & 0.9658 & 0.9464 & 0.8555 \\
+                    \textbf{$\sigma$} & 0.0007 & 0.0010 & 0.0015 & 0.0027 & 0.0053 & 0.0122 & 0.0394 \\
+                    \textbf{min} & 0.9740 & 0.9660 & 0.9635 & 0.9494 & 0.9337 & 0.8688 & 0.6598 \\
+                    \textbf{25\%} & 0.9762 & 0.9756 & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
+                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
+                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
+                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
+                    
+                \end{tabular}
+                \caption[Short]{Long}
+            \end{table}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Accuracy_change_random_removal_fmnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:acc_rn_fmnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{table}[h!]
+                \centering
+                \begin{tabular}{c | c c c c c c c}
+                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
+                    \cline{2-8}
+                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
+                    \hline
+                    \textbf{Mean} & 0.9765 & 0.9760 & 0.9750 & 0.9724 & 0.9658 & 0.9464 & 0.8555 \\
+                    \textbf{$\sigma$} & 0.0007 & 0.0010 & 0.0015 & 0.0027 & 0.0053 & 0.0122 & 0.0394 \\
+                    \textbf{min} & 0.9740 & 0.9660 & 0.9635 & 0.9494 & 0.9337 & 0.8688 & 0.6598 \\
+                    \textbf{25\%} & 0.9762 & 0.9756 & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
+                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
+                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
+                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
+                    
+                \end{tabular}
+                \caption[Short]{Long}
+            \end{table}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Loss_change_random_removal_fmnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:loss_rn_fmnist}
+            \end{figure}
+
+            There is trial text here
+
+            \begin{table}[h!]
+                \centering
+                \begin{tabular}{c | c c c c c c c}
+                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
+                    \cline{2-8}
+                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
+                    \hline
+                    \textbf{Mean} & 0.0751 & 0.0767 & 0.0801 & 0.0885 & 0.1090 & 0.1680 & 0.4298 \\
+                    \textbf{$\sigma$} & 0.0023 & 0.0032 & 0.0047 & 0.0083 & 0.0157 & 0.0338 & 0.0989 \\
+                    \textbf{min} & 0.0720 & 0.0714 & 0.0710 & 0.0735 & 0.0791 & 0.1006 & 0.2311 \\
+                    \textbf{25\%} & 0. & 0.9756 & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
+                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
+                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
+                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
+                    
+                \end{tabular}
+                \caption[Short]{Long}
+            \end{table}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Num_rem_vs_size_removed_fmnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:num_rem_rn_imp_fmnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Accuracy_vs_nodes_removed_fmnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:acc_rn_imp_fmnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Loss_vs_nodes_removed_fmnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:loss_rn_imp_fmnist}
+            \end{figure}
+
+            Trial text
 
     \section{Estimating Node Importance based on Loss and Accuracy}
     
@@ -103,7 +318,7 @@
     \section{Effects of Changing Training Batch Size on Node Importance}
 
 
-    \section{Effects of Using Droput}
+    \section{Effects of Using Dropout}
 
 
 \chapter{Multi-Layer Perceptron}

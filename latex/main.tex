@@ -4,6 +4,8 @@
 \urlstyle{sf}
 \usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
+\usepackage{csvsimple}
+\usepackage{booktabs}
 
 \title{The title of my thesis}
 \subtitle{Any short subtitle}
@@ -93,29 +95,35 @@
         \subsection{VGG-16}
 
 \chapter{Single Layer ANN}
+    In this chapter we will start by analyzing how effective removing nodes at random is. For this section we will only consider
+    a single hidden layer ANN. We will then try estimating the importance of each node by using the loss function and classifying them
+    as important, zero or worse. An important node is one that when removed would increase the loss of the model. A zero node will not
+    significantly affect the loss of the model when removed. Lastly, a worse node will improve the loss of the model when removed. At
+    this point we will also consider a 3 hidden layer MLP and a CNN with 4 convolutional layers followed by a dense layer in addition to
+    the single layer ANN. By using these estimated node importance's, we still prune the models. We will start by pruning the models based
+    on the pre-calculated node importance's, this will be slightly too extreme. Therefore, we will prune the networks by re-calculating
+    the node importance's after removing a node till no node improves the model when removed. Initially, we will do this exhaustively by
+    finding the node when removed will improve the model the most and then removing it. This is very time-consuming and we will therefore
+    consider a "greedy" method that removes the first node that improves or does not affect the model, we will also start ignoring nodes
+    that are quite important for the model in subsequent removals. For the sections on the pruning.
+
+
+    TODO (Describe the datasets used, and the model we consider. Talk about the what we will keep the same during the whole project and what
+    is kept the same for this chapter)
     \section{Pruning Nodes at Random}
+        TODO - Describe the algorithms used to remove the nodes randomly
+
         \subsection{MNIST}
             Artificial Neural Network with single hidden layer of 128 nodes, using ADAM as optimizer with a learning rate of 0.001 trained on 5 epochs, batch size of 32.
             Final Accuracy and Loss on test set are:
-            Loss: 0.0734
-            Accuracy: 0.9770
+            Loss: 0.0879
+            Accuracy: 0.9724
+
             \begin{table}[h!]
                 \centering
-                \begin{tabular}{c | c c c c c c c}
-                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
-                    \cline{2-8}
-                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
-                    \hline
-                    \textbf{Mean} & 0.9765 & 0.9760 & 0.9750 & 0.9724 & 0.9658 & 0.9464 & 0.8555 \\
-                    \textbf{$\sigma$} & 0.0007 & 0.0010 & 0.0015 & 0.0027 & 0.0053 & 0.0122 & 0.0394 \\
-                    \textbf{min} & 0.9740 & 0.9660 & 0.9635 & 0.9494 & 0.9337 & 0.8688 & 0.6598 \\
-                    \textbf{25\%} & 0.9762 & 0.9756 & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
-                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
-                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
-                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
-                    
-                \end{tabular}
+                \resizebox{\textwidth}{!}{\input{tables/accs_random_removal_mnist.tex}}
                 \caption[Short]{Long}
+                \label{tab:ac_rnd_rem_mnist}
             \end{table}
 
             Trial text
@@ -130,21 +138,9 @@
 
             \begin{table}[h!]
                 \centering
-                \begin{tabular}{c | c c c c c c c}
-                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
-                    \cline{2-8}
-                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
-                    \hline
-                    \textbf{Mean} & 0.0751 & 0.0767 & 0.0801 & 0.0885 & 0.1090 & 0.1680 & 0.4298 \\
-                    \textbf{$\sigma$} & 0.0023 & 0.0032 & 0.0047 & 0.0083 & 0.0157 & 0.0338 & 0.0989 \\
-                    \textbf{min} & 0.0720 & 0.0714 & 0.0710 & 0.0735 & 0.0791 & 0.1006 & 0.2311 \\
-                    \textbf{25\%} & 0.07 & 0. & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
-                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
-                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
-                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
-                    
-                \end{tabular}
+                \resizebox{\textwidth}{!}{\input{tables/losses_random_removal_mnist.tex}}
                 \caption[Short]{Long}
+                \label{tab:loss_rnd_rem_mnist}
             \end{table}
 
             Trial text
@@ -159,21 +155,9 @@
 
             \begin{table}[h!]
                 \centering
-                \begin{tabular}{c | c c c c c c c}
-                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
-                    \cline{2-8}
-                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
-                    \hline
-                    \textbf{Mean} & 0.0751 & 0.0767 & 0.0801 & 0.0885 & 0.1090 & 0.1680 & 0.4298 \\
-                    \textbf{$\sigma$} & 0.0023 & 0.0032 & 0.0047 & 0.0083 & 0.0157 & 0.0338 & 0.0989 \\
-                    \textbf{min} & 0.0720 & 0.0714 & 0.0710 & 0.0735 & 0.0791 & 0.1006 & 0.2311 \\
-                    \textbf{25\%} & 0. & 0.9756 & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
-                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
-                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
-                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
-                    
-                \end{tabular}
+                \resizebox{\textwidth}{!}{\input{tables/number_nodes_removed_random_removal_improving_mnist.tex}}
                 \caption[Short]{Long}
+                \label{tab:nr_rnd_rem_imp_mnist}
             \end{table}
 
             Trial text
@@ -208,21 +192,9 @@
 
             \begin{table}[h!]
                 \centering
-                \begin{tabular}{c | c c c c c c c}
-                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
-                    \cline{2-8}
-                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
-                    \hline
-                    \textbf{Mean} & 0.9765 & 0.9760 & 0.9750 & 0.9724 & 0.9658 & 0.9464 & 0.8555 \\
-                    \textbf{$\sigma$} & 0.0007 & 0.0010 & 0.0015 & 0.0027 & 0.0053 & 0.0122 & 0.0394 \\
-                    \textbf{min} & 0.9740 & 0.9660 & 0.9635 & 0.9494 & 0.9337 & 0.8688 & 0.6598 \\
-                    \textbf{25\%} & 0.9762 & 0.9756 & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
-                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
-                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
-                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
-                    
-                \end{tabular}
+                \resizebox{\textwidth}{!}{\input{tables/accs_random_removal_fmnist.tex}}
                 \caption[Short]{Long}
+                \label{tab:ac_rnd_rem_fmnist}
             \end{table}
 
             Trial text
@@ -237,21 +209,9 @@
 
             \begin{table}[h!]
                 \centering
-                \begin{tabular}{c | c c c c c c c}
-                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
-                    \cline{2-8}
-                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
-                    \hline
-                    \textbf{Mean} & 0.9765 & 0.9760 & 0.9750 & 0.9724 & 0.9658 & 0.9464 & 0.8555 \\
-                    \textbf{$\sigma$} & 0.0007 & 0.0010 & 0.0015 & 0.0027 & 0.0053 & 0.0122 & 0.0394 \\
-                    \textbf{min} & 0.9740 & 0.9660 & 0.9635 & 0.9494 & 0.9337 & 0.8688 & 0.6598 \\
-                    \textbf{25\%} & 0.9762 & 0.9756 & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
-                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
-                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
-                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
-                    
-                \end{tabular}
+                \resizebox{\textwidth}{!}{\input{tables/losses_random_removal_fmnist.tex}}
                 \caption[Short]{Long}
+                \label{tab:loss_rnd_rem_fmnist}
             \end{table}
 
             Trial text
@@ -266,21 +226,9 @@
 
             \begin{table}[h!]
                 \centering
-                \begin{tabular}{c | c c c c c c c}
-                    & \multicolumn{7}{c}{\textbf{Number of Nodes}} \\
-                    \cline{2-8}
-                    & 1 & 2 & 4 & 8 & 16 & 32 & 64 \\
-                    \hline
-                    \textbf{Mean} & 0.0751 & 0.0767 & 0.0801 & 0.0885 & 0.1090 & 0.1680 & 0.4298 \\
-                    \textbf{$\sigma$} & 0.0023 & 0.0032 & 0.0047 & 0.0083 & 0.0157 & 0.0338 & 0.0989 \\
-                    \textbf{min} & 0.0720 & 0.0714 & 0.0710 & 0.0735 & 0.0791 & 0.1006 & 0.2311 \\
-                    \textbf{25\%} & 0. & 0.9756 & 0.9742 & 0.9710 & 0.9632 & 0.9410 & 0.8331 \\
-                    \textbf{50\%} & 0.9767 & 0.9762 & 0.9753 & 0.9728 & 0.9669 & 0.9489 & 0.8616 \\
-                    \textbf{75\%} & 0.9770 & 0.9767 & 0.9760 & 0.9742 & 0.9695 & 0.9543 & 0.8837 \\
-                    \textbf{max} & 0.9778 & 0.9780 & 0.9779 & 0.9769 & 0.9769 & 0.9685 & 0.9334 \\
-                    
-                \end{tabular}
+                \resizebox{\textwidth}{!}{\input{tables/number_nodes_removed_random_removal_improving_fmnist.tex}}
                 \caption[Short]{Long}
+                \label{tab:nr_rnd_rem_imp_fmnist}
             \end{table}
 
             Trial text
@@ -309,23 +257,23 @@
 
             Trial text
 
-    \section{Estimating Node Importance based on Loss and Accuracy}
-    
-    
-    \section{Pruning Nodes based on the Loss and Accuracy}
+    \section{Estimating Node Importance based on Loss}
+        TODO - Describe the algorithms used
 
+    \section{Pruning network with pre-calculated importance}
+        TODO - Describe the algorithms used
 
+    \section{Pruning Nodes based on the Loss}
+        TODO - Describe the algorithms used
+
+    \section{Greedy approach to pruning instead of Exhaustive approach}
+        TODO - Describe the algorithms used
+
+\chapter{Multi-Layer Perceptron}
     \section{Effects of Changing Training Batch Size on Node Importance}
 
 
     \section{Effects of Using Dropout}
-
-
-\chapter{Multi-Layer Perceptron}
-    \section{Pruning network with pre-calculated importance}
-
-
-    \section{Greedy approach to pruning instead of Exhaustive approach}
 
 
     \section{Iterative weight initialization using Node importance}

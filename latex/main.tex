@@ -8,6 +8,18 @@
 \usepackage{booktabs}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 
+
+\SetStartEndCondition{ }{}{}%
+\SetKwProg{Fn}{def}{\string:}{}\SetKwFunction{Range}{range}%%
+\SetKw{Return}{return}%
+\SetKw{From}{from}%
+\SetKw{To}{to}%
+\SetKw{KwTo}{in}\SetKwFor{For}{for}{\string:}{}%
+\SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
+\SetKwFor{While}{while}{:}{fintq}%
+\newcommand{\forcond}{$i$ \KwTo\Range{$n$}}
+\AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
+
 \title{The title of my thesis}
 \subtitle{Any short subtitle}
 \author{Lucas Charpentier}
@@ -115,19 +127,53 @@
         TODO - Describe the algorithms used to remove the nodes randomly
 
         \begin{algorithm}
-            \SetKwFunction{RemRndN}{remove_random_nodes}
-            \SetStartEndCondition{ }{}{}%
-            \SetKwProg{Fn}{def}{\string:}{}\SetKwFunction{Range}{range}%%
-            \SetKw{KwTo}{in}\SetKwFor{For}{for}{\string:}{}%
-            \SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
-            \SetKwFor{While}{while}{:}{fintq}%
-            \renewcommand{\forcond}{$i$ \KwTo\Range{$n$}}
-            \AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
-            \Fn{\RemRndN{n, weights, to_consider}}{
-                \KwIn{n is the number of nodes removed; \\ weights are the weights of the model; \\ to_consider is an
-                araay containing the nodes to consider in the random choosing}
-                \
+            \SetKwFunction{RemRndN}{removeRandomNodes}
+            \Fn{\RemRndN{n, weights, to\_consider}}{
+                \KwIn{\\\emph{n} is the number of nodes removed;\\\emph{weights} are the weights of the model;\\
+                \emph{to\_consider} is an array containing the nodes to consider in the random choosing}
+                \KwOut{The weights with the nodes removed (set to zero) and the positions of the nodes removed}
+                \tcc{Start of the code}
+                $to\_drop$ $\leftarrow$ choose $n$ from $to\_consider$ without replacement \\
+                \For{$i$ \KwTo to\_drop}{
+                    $weights$[$0$][:,$i$] = 0 \tcc*[r]{weights going to the node}
+                    $weights$[$1$][$i$] = 0 \tcc*[r]{bias going to the node}
+                    $weights$[$2$][$i$,:] = 0 \tcc*[r]{weights outgoing the node}
+                }
+                \Return{$weights$, $to\_drop$}
             }
+            \caption[Short]{Removing a user defined number of random nodes}
+        \end{algorithm}
+
+        \begin{algorithm}
+            \SetKwFunction{RemRndN}{removeRandomNodes}
+            \SetKwFunction{Shrink}{shrinkModelRandomly}
+            \Fn{\Shrink{model, acc, loss, weights, n, to\_test, x\_train, y\_train, v}}{
+                \KwIn{\\
+                    \emph{model} is the TensorFlow model of the neural network used;\\
+                    \emph{acc} is the accuracy of the original model;\\
+                    \emph{loss} is the loss of the original model;\\
+                    \emph{weights} are the weights of the model;\\
+                    \emph{n} is the number of nodes removed at each step;\\
+                    \emph{to\_test} is an array containing the nodes to consider in the random choosing;\\
+                    \emph{x\_train} is the training dataset used;\\
+                    \emph{y\_train} is the labels of the training dataset used;\\
+                    \emph{v} defines whether are output should be verbose or not;
+                }
+                \KwOut{The weights with the nodes removed (set to zero) and the number of nodes removed}
+                \tcc{Start of the code}
+                $best\_loss$ $\leftarrow$ $loss$\\
+                $best\_acc$ $\leftarrow$ $acc$\\
+                $best\_weights$ $\leftarrow$ copy($weights$)\\
+                $num\_removed$ $\leftarrow$ $0$\\
+                $to\_consider$ $\leftarrow$ list \From $0$ \To the number of nodes\\
+                \For{$i$ \KwTo to\_drop}{
+                    weights[$0$][:,$i$] = 0 \tcc*[r]{weights going to the node}
+                    weights[$1$][$i$] = 0 \tcc*[r]{bias going to the node}
+                    weights[$2$][$i$,:] = 0 \tcc*[r]{weights outgoing the node}
+                }
+                \Return{$best\_weights$, $num\_removed$}
+            }
+            \caption[Short]{Shrinking the model by removing nodes randomly}
         \end{algorithm}
 
         \subsection{MNIST}

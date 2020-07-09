@@ -6,6 +6,7 @@
 \usepackage[backend=biber,style=numeric-comp]{biblatex}
 \usepackage{csvsimple}
 \usepackage{booktabs}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
 
 \title{The title of my thesis}
 \subtitle{Any short subtitle}
@@ -112,6 +113,22 @@
     is kept the same for this chapter)
     \section{Pruning Nodes at Random}
         TODO - Describe the algorithms used to remove the nodes randomly
+
+        \begin{algorithm}
+            \SetKwFunction{RemRndN}{remove_random_nodes}
+            \SetStartEndCondition{ }{}{}%
+            \SetKwProg{Fn}{def}{\string:}{}\SetKwFunction{Range}{range}%%
+            \SetKw{KwTo}{in}\SetKwFor{For}{for}{\string:}{}%
+            \SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
+            \SetKwFor{While}{while}{:}{fintq}%
+            \renewcommand{\forcond}{$i$ \KwTo\Range{$n$}}
+            \AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
+            \Fn{\RemRndN{n, weights, to_consider}}{
+                \KwIn{n is the number of nodes removed; \\ weights are the weights of the model; \\ to_consider is an
+                araay containing the nodes to consider in the random choosing}
+                \
+            }
+        \end{algorithm}
 
         \subsection{MNIST}
             Artificial Neural Network with single hidden layer of 128 nodes, using ADAM as optimizer with a learning rate of 0.001 trained on 5 epochs, batch size of 32.

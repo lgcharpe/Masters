@@ -14,6 +14,11 @@
 \SetKw{Return}{return}%
 \SetKw{From}{from}%
 \SetKw{To}{to}%
+\SetKw{And}{and}%
+\SetKw{On}{on}%
+\SetKw{Inc}{increment}%
+\SetKw{By}{by}%
+\SetKw{Remove}{remove}%
 \SetKw{KwTo}{in}\SetKwFor{For}{for}{\string:}{}%
 \SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
 \SetKwFor{While}{while}{:}{fintq}%
@@ -154,7 +159,7 @@
                     \emph{loss} is the loss of the original model;\\
                     \emph{weights} are the weights of the model;\\
                     \emph{n} is the number of nodes removed at each step;\\
-                    \emph{to\_test} is an array containing the nodes to consider in the random choosing;\\
+                    \emph{to\_test} is the number of times we try to remove nodes;\\
                     \emph{x\_train} is the training dataset used;\\
                     \emph{y\_train} is the labels of the training dataset used;\\
                     \emph{v} defines whether are output should be verbose or not;
@@ -166,10 +171,20 @@
                 $best\_weights$ $\leftarrow$ copy($weights$)\\
                 $num\_removed$ $\leftarrow$ $0$\\
                 $to\_consider$ $\leftarrow$ list \From $0$ \To the number of nodes\\
-                \For{$i$ \KwTo to\_drop}{
-                    weights[$0$][:,$i$] = 0 \tcc*[r]{weights going to the node}
-                    weights[$1$][$i$] = 0 \tcc*[r]{bias going to the node}
-                    weights[$2$][$i$,:] = 0 \tcc*[r]{weights outgoing the node}
+                \For{$\_$ \KwTo \Range{to\_test}}{
+                    $test\_weights$ $\leftarrow$ copy($best\_weights$)\\
+                    $test\_weights$, $dropped$ = \RemRndN{n, test\_weights, to\_consider}\\
+                    $new\_loss$, $new\_acc$ $\leftarrow$ evaluate $model$ \On $x\_train$ \And $y\_train$\\
+                    $score$ = $(1 - (new\_loss / best\_loss)) + ((new\_acc / best\_acc) - 1)$\\
+                    \If{score > 0}{
+                        $best\_loss$ $\leftarrow$ $new\_loss$\\
+                        $best\_acc$ $\leftarrow$ $new\_acc$\\
+                        $best\_weights$ $\leftarrow$ copy($test\_weights$)\\
+                        \Inc $num\_removed$ \By $n$\\
+                        \For{node \KwTo dropped}{
+                            \Remove node \From $to\_consider$
+                        }
+                    }
                 }
                 \Return{$best\_weights$, $num\_removed$}
             }

@@ -7,6 +7,7 @@
 \usepackage{csvsimple}
 \usepackage{booktabs}
 \usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{multirow}
 
 
 \SetStartEndCondition{ }{}{}%
@@ -221,7 +222,17 @@
                 \label{tab:loss_rnd_rem_mnist}
             \end{table}
 
-            Trial text
+            \begin{table}
+                \begin{tabular}{l|l|l|rrrrrrr}
+                    \toprule
+                    \multirow{2}{*}{Datasets} & \multirow{2}{*}{Metric} & \multirow{2}{*}{Number of nodes} & \multicolumn{7}{c}{Statistics}\\
+                    \cmidrule{4-10}\\
+                    {} & {} & {} & \textbf{mean} & \textbf{$\sigma$} & \textbf{min} & \textbf{25\%}
+                    & \textbf{50\%} & \textbf{75\%} & \textbf{max} \\
+                    \midrule
+                    
+                \end{tabular}
+            \end{table}
 
             \begin{figure}[h!]\centering
                 \includegraphics[width=\textwidth]{Loss_change_random_removal_mnist.png}

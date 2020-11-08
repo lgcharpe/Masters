@@ -801,3 +801,7 @@ training_2/
 
 # Cache
 cache/
+
+# Weights
+my_weights.*
+weights.*

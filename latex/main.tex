@@ -1,0 +1,390 @@
+\documentclass[UKenglish]{ifimaster}
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc,url}
+\urlstyle{sf}
+\usepackage{babel,textcomp,csquotes,duomasterforside,varioref,graphicx}
+\usepackage[backend=biber,style=numeric-comp]{biblatex}
+\usepackage{csvsimple}
+\usepackage{booktabs}
+\usepackage[linesnumbered,ruled,vlined]{algorithm2e}
+\usepackage{multirow}
+
+
+\SetStartEndCondition{ }{}{}%
+\SetKwProg{Fn}{def}{\string:}{}\SetKwFunction{Range}{range}%%
+\SetKw{Return}{return}%
+\SetKw{From}{from}%
+\SetKw{To}{to}%
+\SetKw{And}{and}%
+\SetKw{On}{on}%
+\SetKw{Inc}{increment}%
+\SetKw{By}{by}%
+\SetKw{Remove}{remove}%
+\SetKw{KwTo}{in}\SetKwFor{For}{for}{\string:}{}%
+\SetKwIF{If}{ElseIf}{Else}{if}{:}{elif}{else:}{}%
+\SetKwFor{While}{while}{:}{fintq}%
+\newcommand{\forcond}{$i$ \KwTo\Range{$n$}}
+\AlgoDontDisplayBlockMarkers\SetAlgoNoEnd\SetAlgoNoLine%
+
+\title{The title of my thesis}
+\subtitle{Any short subtitle}
+\author{Lucas Charpentier}
+
+\bibliography{mybib}
+
+\graphicspath{ {images/} }
+
+\begin{document}
+\duoforside[program={Computational Science},
+    option={Imaging and Biomedical Computing},
+    dept={Departement of Informatics \and Departement of Physics},
+    long
+    ]
+\frontmatter{}
+\maketitle{}
+
+\chapter*{Abstract}
+\tableofcontents{}
+\listoffigures{}
+\listoftables{}
+
+\chapter*{Preface}
+
+\mainmatter{}
+
+\chapter{Introduction}
+    \section{Background and Motivation}
+    
+    
+    \section{Problem Statement}
+
+
+    \section{Thesis Outline}
+
+
+\chapter{Planning the project}
+    \section{Machine Learning}
+        \subsection{Supervised Learning}
+        
+        
+        \subsection{Unsupervised Learning}
+
+    
+    \section{Artificial Neural Networks}
+        \subsection{Perceptron}
+
+
+        \subsection{Multilayer Perceptron}
+
+
+        \subsection{Training a Neural Network}
+
+    
+    \section{Convolutional Neural Network}
+        \subsection{Convolutional Layers}
+
+
+        \subsection{Pooling Layers}
+
+    
+    \section{Neural Network Training Optimization}
+        \subsection{Weight Initialization}
+
+
+        \subsection{Training Batch Size}
+
+
+        \subsection{Dropout}
+
+
+    \section{Network Pruning}
+
+    
+    \section{Datasets}
+        \subsection{MNIST}
+
+
+        \subsection{Fashion MNIST}
+
+
+        \subsection{CIFAR-10}
+
+
+    \section{Architectures}
+        \subsection{VGG-16}
+
+\chapter{Single Layer ANN}
+    In this chapter we will start by analyzing how effective removing nodes at random is. For this section we will only consider
+    a single hidden layer ANN. We will then try estimating the importance of each node by using the loss function and classifying them
+    as important, zero or worse. An important node is one that when removed would increase the loss of the model. A zero node will not
+    significantly affect the loss of the model when removed. Lastly, a worse node will improve the loss of the model when removed. At
+    this point we will also consider a 3 hidden layer MLP and a CNN with 4 convolutional layers followed by a dense layer in addition to
+    the single layer ANN. By using these estimated node importance's, we still prune the models. We will start by pruning the models based
+    on the pre-calculated node importance's, this will be slightly too extreme. Therefore, we will prune the networks by re-calculating
+    the node importance's after removing a node till no node improves the model when removed. Initially, we will do this exhaustively by
+    finding the node when removed will improve the model the most and then removing it. This is very time-consuming and we will therefore
+    consider a "greedy" method that removes the first node that improves or does not affect the model, we will also start ignoring nodes
+    that are quite important for the model in subsequent removals. For the sections on the pruning.
+
+
+    TODO (Describe the datasets used, and the model we consider. Talk about the what we will keep the same during the whole project and what
+    is kept the same for this chapter)
+    \section{Pruning Nodes at Random}
+        TODO - Describe the algorithms used to remove the nodes randomly
+
+        \begin{algorithm}
+            \SetKwFunction{RemRndN}{removeRandomNodes}
+            \Fn{\RemRndN{n, weights, to\_consider}}{
+                \KwIn{\\\emph{n} is the number of nodes removed;\\\emph{weights} are the weights of the model;\\
+                \emph{to\_consider} is an array containing the nodes to consider in the random choosing}
+                \KwOut{The weights with the nodes removed (set to zero) and the positions of the nodes removed}
+                \tcc{Start of the code}
+                $to\_drop$ $\leftarrow$ choose $n$ from $to\_consider$ without replacement \\
+                \For{$i$ \KwTo to\_drop}{
+                    $weights$[$0$][:,$i$] = 0 \tcc*[r]{weights going to the node}
+                    $weights$[$1$][$i$] = 0 \tcc*[r]{bias going to the node}
+                    $weights$[$2$][$i$,:] = 0 \tcc*[r]{weights outgoing the node}
+                }
+                \Return{$weights$, $to\_drop$}
+            }
+            \caption[Short]{Removing a user defined number of random nodes}
+        \end{algorithm}
+
+        \begin{algorithm}
+            \SetKwFunction{RemRndN}{removeRandomNodes}
+            \SetKwFunction{Shrink}{shrinkModelRandomly}
+            \Fn{\Shrink{model, acc, loss, weights, n, to\_test, x\_train, y\_train, v}}{
+                \KwIn{\\
+                    \emph{model} is the TensorFlow model of the neural network used;\\
+                    \emph{acc} is the accuracy of the original model;\\
+                    \emph{loss} is the loss of the original model;\\
+                    \emph{weights} are the weights of the model;\\
+                    \emph{n} is the number of nodes removed at each step;\\
+                    \emph{to\_test} is the number of times we try to remove nodes;\\
+                    \emph{x\_train} is the training dataset used;\\
+                    \emph{y\_train} is the labels of the training dataset used;\\
+                    \emph{v} defines whether are output should be verbose or not;
+                }
+                \KwOut{The weights with the nodes removed (set to zero) and the number of nodes removed}
+                \tcc{Start of the code}
+                $best\_loss$ $\leftarrow$ $loss$\\
+                $best\_acc$ $\leftarrow$ $acc$\\
+                $best\_weights$ $\leftarrow$ copy($weights$)\\
+                $num\_removed$ $\leftarrow$ $0$\\
+                $to\_consider$ $\leftarrow$ list \From $0$ \To the number of nodes\\
+                \For{$\_$ \KwTo \Range{to\_test}}{
+                    $test\_weights$ $\leftarrow$ copy($best\_weights$)\\
+                    $test\_weights$, $dropped$ = \RemRndN{n, test\_weights, to\_consider}\\
+                    $new\_loss$, $new\_acc$ $\leftarrow$ evaluate $model$ \On $x\_train$ \And $y\_train$\\
+                    $score$ = $(1 - (new\_loss / best\_loss)) + ((new\_acc / best\_acc) - 1)$\\
+                    \If{score > 0}{
+                        $best\_loss$ $\leftarrow$ $new\_loss$\\
+                        $best\_acc$ $\leftarrow$ $new\_acc$\\
+                        $best\_weights$ $\leftarrow$ copy($test\_weights$)\\
+                        \Inc $num\_removed$ \By $n$\\
+                        \For{node \KwTo dropped}{
+                            \Remove node \From $to\_consider$
+                        }
+                    }
+                }
+                \Return{$best\_weights$, $num\_removed$}
+            }
+            \caption[Short]{Shrinking the model by removing nodes randomly}
+        \end{algorithm}
+
+        \subsection{MNIST}
+            Artificial Neural Network with single hidden layer of 128 nodes, using ADAM as optimizer with a learning rate of 0.001 trained on 5 epochs, batch size of 32.
+            Final Accuracy and Loss on test set are:
+            Loss: 0.0879
+            Accuracy: 0.9724
+
+            \begin{table}[h!]
+                \centering
+                \resizebox{\textwidth}{!}{\input{tables/accs_random_removal_mnist.tex}}
+                \caption[Short]{Long}
+                \label{tab:ac_rnd_rem_mnist}
+            \end{table}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Accuracy_change_random_removal_mnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:acc_rn_mnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{table}[h!]
+                \centering
+                \resizebox{\textwidth}{!}{\input{tables/losses_random_removal_mnist.tex}}
+                \caption[Short]{Long}
+                \label{tab:loss_rnd_rem_mnist}
+            \end{table}
+
+            \begin{table}
+                \begin{tabular}{l|l|l|rrrrrrr}
+                    \toprule
+                    \multirow{2}{*}{Datasets} & \multirow{2}{*}{Metric} & \multirow{2}{*}{Number of nodes} & \multicolumn{7}{c}{Statistics}\\
+                    \cmidrule{4-10}\\
+                    {} & {} & {} & \textbf{mean} & \textbf{$\sigma$} & \textbf{min} & \textbf{25\%}
+                    & \textbf{50\%} & \textbf{75\%} & \textbf{max} \\
+                    \midrule
+                    
+                \end{tabular}
+            \end{table}
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Loss_change_random_removal_mnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:loss_rn_mnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{table}[h!]
+                \centering
+                \resizebox{\textwidth}{!}{\input{tables/number_nodes_removed_random_removal_improving_mnist.tex}}
+                \caption[Short]{Long}
+                \label{tab:nr_rnd_rem_imp_mnist}
+            \end{table}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Num_rem_vs_size_removed_mnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:num_rem_rn_imp_mnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Accuracy_vs_nodes_removed_mnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:acc_rn_imp_mnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Loss_vs_nodes_removed_mnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:loss_rn_imp_mnist}
+            \end{figure}
+
+            Trial text
+
+        \subsection{Fashion MNIST}
+
+            Trial text
+
+            \begin{table}[h!]
+                \centering
+                \resizebox{\textwidth}{!}{\input{tables/accs_random_removal_fmnist.tex}}
+                \caption[Short]{Long}
+                \label{tab:ac_rnd_rem_fmnist}
+            \end{table}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Accuracy_change_random_removal_fmnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:acc_rn_fmnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{table}[h!]
+                \centering
+                \resizebox{\textwidth}{!}{\input{tables/losses_random_removal_fmnist.tex}}
+                \caption[Short]{Long}
+                \label{tab:loss_rnd_rem_fmnist}
+            \end{table}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Loss_change_random_removal_fmnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:loss_rn_fmnist}
+            \end{figure}
+
+            There is trial text here
+
+            \begin{table}[h!]
+                \centering
+                \resizebox{\textwidth}{!}{\input{tables/number_nodes_removed_random_removal_improving_fmnist.tex}}
+                \caption[Short]{Long}
+                \label{tab:nr_rnd_rem_imp_fmnist}
+            \end{table}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Num_rem_vs_size_removed_fmnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:num_rem_rn_imp_fmnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Accuracy_vs_nodes_removed_fmnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:acc_rn_imp_fmnist}
+            \end{figure}
+
+            Trial text
+
+            \begin{figure}[h!]\centering
+                \includegraphics[width=\textwidth]{Loss_vs_nodes_removed_fmnist.png}
+                \caption[Short title]{Testing}
+                \label{fig:loss_rn_imp_fmnist}
+            \end{figure}
+
+            Trial text
+
+    \section{Estimating Node Importance based on Loss}
+        TODO - Describe the algorithms used
+
+    \section{Pruning network with pre-calculated importance}
+        TODO - Describe the algorithms used
+
+    \section{Pruning Nodes based on the Loss}
+        TODO - Describe the algorithms used
+
+    \section{Greedy approach to pruning instead of Exhaustive approach}
+        TODO - Describe the algorithms used
+
+\chapter{Multi-Layer Perceptron}
+    \section{Effects of Changing Training Batch Size on Node Importance}
+
+
+    \section{Effects of Using Dropout}
+
+
+    \section{Iterative weight initialization using Node importance}
+
+
+
+\chapter{Convolutional Neural Network}
+    \section{Looking at effects of per class accuracy after pruning}
+
+
+    \section{Pruning based on class accuracy}
+
+
+\chapter{Case study: Reducing a VGG-16 model trained on X dataset}
+
+\chapter{Conclusion}
+    \section{Summary}
+
+
+    \section{Future Works}
+
+
+\backmatter{}
+\printbibliography
+\end{document}

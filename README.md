@@ -3,6 +3,8 @@ This git repo contains all the code for my masters. In addition there is some re
 
 The Tensorflow_tutorial folder contains some tutorials done in TensorFlow from the TensorFlow (www.tensorflow.org) website.
 
+The readings folder contains some of the readings used in this thesis.
+
 The code folder contains dummy code to test data loading.
 
 The hfunc folder contains helper functions to be used by the notebooks.

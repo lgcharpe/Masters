@@ -805,3 +805,6 @@ cache/
 # Weights
 my_weights.*
 weights.*
+
+# Latex files
+latex_tutorial/
